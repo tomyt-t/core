@@ -1,94 +1,68 @@
-<p align="center">
-  <a href="#">
-    <img alt="stencil-logo" src="https://github.com/stenciljs/core/blob/main/stencil-logo.png" width="60">
-  </a>
-</p>
+# Explorando Práticas de Teste: stenciljs/core
 
-<h1 align="center">
-  Stencil
-</h1>
+## Passo 1: Repositório selecionado
 
-<p align="center">
-  A compiler for generating <a href="https://www.webcomponents.org/introduction" target="_blank" rel="noopener noref">Web Components</a> using technologies like TypeScript and JSX, built by the <a href="https://ionic.io/">Ionic team</a>.
-</p>
+**Repositório:** [stenciljs/core](https://github.com/stenciljs/core)
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@stencil/core">
-    <img src="https://img.shields.io/npm/v/@stencil/core.svg" alt="StencilJS is released under the MIT license." /></a>
-  <a href="https://github.com/stenciljs/core/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="StencilJS is released under the MIT license." />
-  </a>
-  <a href="https://github.com/stenciljs/core/blob/main/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
-  </a>
-  <a href="https://twitter.com/stenciljs">
-    <img src="https://img.shields.io/badge/follow-%40stenciljs-1DA1F2?logo=twitter" alt="Follow @stenciljs">
-  </a>
-  <a href="https://chat.stenciljs.com">
-    <img src="https://img.shields.io/discord/520266681499779082?color=7289DA&label=%23stencil&logo=discord&logoColor=white" alt="Official Ionic Discord" />
-  </a>
-</p>
+O Stencil é um compilador mantido pela equipe do Ionic que gera Web Components a partir de código TypeScript/JSX. Escolhi esse projeto porque ele é grande e maduro. Além disso, como o código que ele gera roda no navegador, o projeto precisa de vários tipos de teste diferentes, o que deixa a análise mais interessante.
 
-<h2 align="center">
-  <a href="https://stenciljs.com/docs/getting-started#starting-a-new-project">Quick Start</a>
-  <span> · </span>
-  <a href="https://stenciljs.com/docs/introduction">Documentation</a>
-  <span> · </span>
-  <a href="https://github.com/stenciljs/core/blob/main/CONTRIBUTING.md">Contribute</a>
-  <span> · </span>
-  <a href="https://ionicframework.com/blog/tag/stencil/">Blog</a>
-  <br />
-  Community:
-  <a href="https://chat.stenciljs.com">Discord</a>
-  <span> · </span>
-  <a href="https://forum.ionicframework.com/c/stencil/21/">Forums</a>
-  <span> · </span>
-  <a href="https://twitter.com/stenciljs">Twitter</a>
-</h2>
+## Passo 2: Exploração no TestMiner
 
-### Getting Started
+Página analisada: https://andrehora.github.io/testminer/#stenciljs/core
 
-Start a new project by following our quick [Getting Started guide](https://stenciljs.com/docs/getting-started).
-We would love to hear from you!
-If you have any feedback or run into issues using Stencil, please file an [issue](https://github.com/stenciljs/core/issues/new) on this repository.
+### Onde ficam os testes
 
-### Examples
-A Stencil component looks a lot like a class-based React component, with the addition of TypeScript decorators:
-```tsx
-import { Component, Prop, h } from '@stencil/core';
+| Pasta | Arquivos de teste |
+|---|---|
+| `test/` | 1007 |
+| `src/` | 391 |
+| `.github/` | 9 |
+| `scripts/` | 8 |
+| `.` (raiz) | 1 |
+| `docs/` | 1 |
+| `screenshot/` | 1 |
 
-@Component({
-  tag: 'my-component',            // the name of the component's custom HTML tag
-  styleUrl: 'my-component.css',   // css styles to apply to the component
-  shadow: true,                   // this component uses the ShadowDOM
-})
-export class MyComponent {
-  // The component accepts two arguments:
-  @Prop() first: string;
-  @Prop() last: string;
+A maior parte dos arquivos está na pasta dedicada `test/`. Mesmo assim, há muitos (391) dentro de `src/`, junto do código de produção.
 
-   //The following HTML is rendered when our component is used
-  render() {
-    return (
-      <div>
-        Hello, my name is {this.first} {this.last}
-      </div>
-    );
-  }
-}
-```
+### Evolução dos testes
 
-The component above can be used like any other HTML element:
+| Versão | Testes (aprox.) |
+|---|---|
+| 0.0.0 | ~250 |
+| 1.11.0 | ~235 |
+| 4.45.1 | ~470 |
 
-```html
-<my-component first="Stencil" last="JS"></my-component>
-```
+Da versão 0.0.0 para a 1.11.0, o número ficou quase estável, com uma leve queda. Da 1.11.0 até a 4.45.1, ele praticamente dobrou.
 
-Since Stencil generates web components, they work in any major framework or with no framework at all.
-In many cases, Stencil can be used as a drop in replacement for traditional frontend framework, though using it as such is certainly not required.
+### Dependências de teste (npm)
 
-### Contributing
+| Papel | Bibliotecas |
+|---|---|
+| Executor de testes de unidade | `jest`, `jest-circus`, `jest-runner`, `jest-runtime`, `jest-cli`, `jest-config` e demais módulos `jest-*` |
+| DOM simulado | `jsdom`, `jest-environment-jsdom`, `jest-environment-node` |
+| Snapshots | `jest-snapshot`, `jest-serializer` |
+| Mocks, espiões e controle de tempo | `jest-mock`, `spy`, `tinyspy`, `fake-timers`, `sinonjs__fake-timers` |
+| Navegador real / E2E | `puppeteer`, `puppeteer-core`, `karma`, `karma-jasmine`, `karma-chrome-launcher`, `karma-typescript`, `jasmine-core`, `webdriverio`, `mocha`, `mocha-framework` |
+| Cobertura de código | `istanbul-lib-coverage`, `istanbul-lib-instrument`, `istanbul-lib-report`, `istanbul-lib-source-maps`, `istanbul-reports`, `test-exclude` |
 
-Thanks for your interest in contributing!
-Please take a moment to read up on our guidelines for [contributing](https://github.com/stenciljs/core/blob/main/CONTRIBUTING.md). We've created comprehensive technical documentation for contributors that explains Stencil's internal architecture, including the compiler, runtime, build system, and other core components in the [/docs](/docs/) directory.
-Please note that this project is released with a [Contributor Code of Conduct](https://github.com/stenciljs/core/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Observações:
+- O Jest e o Puppeteer não servem só para testar o próprio Stencil. Eles também fazem parte da API de testes que o Stencil oferece a quem cria componentes com ele (`stencil test --spec` e `stencil test --e2e`).
+- `evp_bytestokey` e `safe-regex-test` não são bibliotecas de teste. Provavelmente aparecem na lista porque o nome contém "test", ou seja, são falsos positivos da detecção por nome.
+
+### Testes no CI
+
+O TestMiner identificou workflows de teste separados por área, como `analysis`, `build`, `bundlers`, `component` e `copytask`, entre outros.
+
+## Passo 3: Prática de teste: testes em várias camadas
+
+A prática que mais chama atenção no Stencil é testar o software em **camadas diferentes**, cada uma com ferramentas próprias, em vez de depender de um único tipo de teste.
+
+**1. Testes de unidade perto do código.** Os 391 arquivos de teste em `src/` ficam ao lado dos módulos que testam. Eles usam o Jest e verificam partes do compilador de forma isolada. Quando precisam de um DOM, usam o `jsdom`, que simula o navegador dentro do Node. Para isolar dependências ou controlar o tempo, usam mocks, spies e fake timers. São testes rápidos, que dão retorno imediato a quem está mexendo no código.
+
+**2. Testes de integração e em navegador real numa pasta dedicada.** A pasta `test/`, com 1007 arquivos, concentra os testes que exercitam o compilador de ponta a ponta. Eles compilam componentes de exemplo e verificam o resultado em um navegador de verdade, com Karma + Jasmine, WebdriverIO + Mocha e Puppeteer. Isso é necessário porque o produto do Stencil é código que roda no navegador. Alguns problemas, como renderização, Shadow DOM, ciclo de vida dos componentes e integração com bundlers, só aparecem em ambiente real e passariam despercebidos num DOM simulado.
+
+**3. CI dividido por área.** Com workflows separados (`bundlers`, `component`, `copytask`, `analysis`...), uma falha aponta direto para a parte do sistema que quebrou. Cada grupo de testes também pode rodar de forma independente.
+
+**Por que isso é uma boa prática:** existe um compromisso entre velocidade e fidelidade. Testes de unidade são baratos e rápidos, mas não garantem que o sistema funciona como um todo. Testes em navegador são mais lentos e trabalhosos, mas reproduzem o uso real. Combinando os dois, o projeto tem retorno rápido no dia a dia e, ao mesmo tempo, confiança de que o código gerado funciona onde importa. A cobertura medida com Istanbul complementa isso, mostrando quais partes do código os testes realmente exercitam.
+
+Um detalhe interessante é que Karma e WebdriverIO aparecem ao mesmo tempo. Como o Karma foi descontinuado, isso sugere que o projeto está migrando (ou já migrou) seus testes em navegador para o WebdriverIO. Ou seja, a infraestrutura de testes também evolui junto com o projeto. O histórico mostra esse crescimento: o número de testes praticamente dobrou entre as versões 1.11.0 e 4.45.1.
